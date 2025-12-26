@@ -1,49 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- RAW VIEW CHECKER - MUST BE FIRST -->
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('raw')) {
+                const id = urlParams.get('raw');
+                
+                // Stop the browser from parsing the rest of the original file
+                if (window.stop) window.stop();
+
+                // Completely overwrite the document
+                document.open();
+                document.write(`
+<!DOCTYPE html>
+<html>
+<body style="background-color: #020205; color: #a1a1aa; font-family: monospace; margin: 20px; white-space: pre-wrap;">-- You cant look
+-- Source is protected by Valkyrie.rbx
+Script ID: ${id}</body>
+</html>`);
+                document.close();
+
+                // Stop this script from continuing
+                throw new Error("Raw View Active");
+            }
+        })();
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>valkyrie.rbx</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script>
-        // --- CRITICAL: RAW VIEW CHECKER ---
-        // This runs before anything else to simulate a "Raw" page
-        (function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.has('raw')) {
-                // 1. Immediately stop parsing/loading the rest of the original HTML
-                if (window.stop) window.stop();
-
-                // 2. Get the ID
-                const id = urlParams.get('raw');
-
-                // 3. Wipe the document and write ONLY the raw content
-                document.open();
-                document.write(`
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Raw Script</title>
-    <meta name="color-scheme" content="dark">
-    <style>
-        body { background-color: #020205; color: #a1a1aa; font-family: monospace; margin: 20px; font-size: 14px; }
-        pre { white-space: pre-wrap; word-break: break-all; }
-    </style>
-</head>
-<body>
-<pre>-- You cant look
--- Source is protected by Valkyrie.rbx
-Script ID: ${id}</pre>
-</body>
-</html>`);
-                document.close();
-
-                // 4. Throw error to kill any remaining script execution from the original file
-                throw new Error("Rendered Raw View - Stopping UI Load"); 
-            }
-        })();
-
         tailwind.config = {
             theme: {
                 extend: {
@@ -522,4 +512,4 @@ Script ID: ${id}</pre>
         }
     </script>
 </body>
-    </html>
+</html>
